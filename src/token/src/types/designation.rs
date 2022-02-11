@@ -32,7 +32,7 @@ pub fn find_designation(wallet: Principal, dlist: Vec<Designation>) -> Designati
 			i += 1;
 	}
 	if i == dlist.len()
-		ok(Designation{owner: target, role: 'NA', assignment_time: Utc::now()});
+		ok(Designation{owner: target, role: "NA", assignment_time: Utc::now()});
 	else
 		ok(dlist[i]);
 }

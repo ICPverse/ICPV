@@ -71,21 +71,21 @@ impl Ledger {
 	pub fn transfer_to_investor(&mut self, from: Principal, to: Principal, amount: Nat, fee: Nat) -> Nat {
         let id = self.next_id();
         self.push(TxRecord::transfer(id.clone(), from, to, amount, fee));
-		DesignationList.push(Designation{owner: to, role: 'investor', assignment_time: Utc::now()});
+		DesignationList.push(Designation{owner: to, role: "investor", assignment_time: Utc::now()});
         id
     }
 	
 	pub fn transfer_to_founder(&mut self, from: Principal, to: Principal, amount: Nat, fee: Nat) -> Nat {
         let id = self.next_id();
         self.push(TxRecord::transfer(id.clone(), from, to, amount, fee));
-		DesignationList.push(Designation{owner: to, role: 'founder', assignment_time: Utc::now()});
+		DesignationList.push(Designation{owner: to, role: "founder", assignment_time: Utc::now()});
         id
     }
 	
 	pub fn transfer_to_advisor(&mut self, from: Principal, to: Principal, amount: Nat, fee: Nat) -> Nat {
         let id = self.next_id();
         self.push(TxRecord::transfer(id.clone(), from, to, amount, fee));
-		DesignationList.push(Designation{owner: to, role: 'advisor', assignment_time: Utc::now()});
+		DesignationList.push(Designation{owner: to, role: "advisor", assignment_time: Utc::now()});
         id
     }
 
