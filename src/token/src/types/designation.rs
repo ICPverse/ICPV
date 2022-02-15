@@ -32,7 +32,7 @@ pub fn find_designation(wallet: Principal, dlist: Vec<Designation>) -> Designati
 			i += 1;
 	}
 	if i == dlist.len()
-		ok(Designation{owner: target, role: "NA", assignment_time: Utc::now()});
+		ok(Designation{owner: target, role: "NA", assignment_time: Utc::now().timestamp()});
 	else
 		ok(dlist[i]);
 }
@@ -41,7 +41,7 @@ pub fn remainder_limit(des: Designation, dlist: Vec<Designation>) -> Nat {
 	if des.role == 'NA'
 		return 0;
 	else {
-		let mut time_elapsed = (Utc::now().signed_duration_since(des.assignment_time));
+		let mut time_elapsed = (Utc::now().timestamp() - des.assignment_time);
 		let mut days_elapsed = time_elapsed/(60*60*24);
 		match days_elapsed {
 			0...=90 => return 5%;

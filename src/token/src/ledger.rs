@@ -3,7 +3,8 @@ use crate::types::Designation;
 use candid::{CandidType, Deserialize, Nat, Principal};
 use num_traits::ToPrimitive;
 use chrono::prelude::*;
-use chrono::Duration;
+use crate::types::init_dl;
+use crate::types::DesignationList;
 
 const MAX_HISTORY_LENGTH: usize = 1_000_000;
 const HISTORY_REMOVAL_BATCH_SIZE: usize = 10_000;
@@ -71,21 +72,23 @@ impl Ledger {
 	pub fn transfer_to_investor(&mut self, from: Principal, to: Principal, amount: Nat, fee: Nat) -> Nat {
         let id = self.next_id();
         self.push(TxRecord::transfer(id.clone(), from, to, amount, fee));
-		DesignationList.push(Designation{owner: to, role: "investor", assignment_time: Utc::now()});
+		DesignationList.push(Designation{owner: to, role: "investor".to_string(), assignment_time: Utc::now().timestamp(),tokens: amount});
         id
     }
 	
 	pub fn transfer_to_founder(&mut self, from: Principal, to: Principal, amount: Nat, fee: Nat) -> Nat {
         let id = self.next_id();
         self.push(TxRecord::transfer(id.clone(), from, to, amount, fee));
-		DesignationList.push(Designation{owner: to, role: "founder", assignment_time: Utc::now()});
+		DesignationList.push(Designation{owner: to, role: "founder".to_string(), assignment_time: Utc::now().timestamp(),tokens: amount});
+		
         id
     }
 	
 	pub fn transfer_to_advisor(&mut self, from: Principal, to: Principal, amount: Nat, fee: Nat) -> Nat {
         let id = self.next_id();
         self.push(TxRecord::transfer(id.clone(), from, to, amount, fee));
-		DesignationList.push(Designation{owner: to, role: "advisor", assignment_time: Utc::now()});
+		// DesignationList.push(Designation{owner: to, role: "advisor".to_string(), assignment_time: Utc::now().timestamp(),tokens: amount});
+        let a = DesignationList;
         id
     }
 
@@ -120,8 +123,7 @@ impl Ledger {
     pub fn mint(&mut self, from: Principal, to: Principal, amount: Nat) -> Nat {
         let id = self.len();
         self.push(TxRecord::mint(id.clone(), from, to, amount));
-		init_dl();
-		
+				
         id
     }
 
@@ -148,4 +150,9 @@ impl Ledger {
             self.vec_offset += HISTORY_REMOVAL_BATCH_SIZE;
         }
     }
+	
+	pub fn initialize_designation_history(&mut self) {
+		init_dl();
+	
+	}
 }
