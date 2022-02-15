@@ -2,19 +2,18 @@ use crate::api::dip20_meta::{allowance, balance_of};
 use crate::api::is20_auction::auction_principal;
 use crate::state::{Balances, BiddingState, State};
 use crate::types::{TxError, TxReceipt};
-use crate::types::Designation;
 use crate::utils::check_caller_is_owner;
 use candid::{candid_method, Nat};
 use ic_cdk_macros::*;
 use ic_kit::{ic, Principal};
 use ic_storage::IcStorage;
 use std::collections::HashMap;
+use crate::types::find_designation;
+use crate::types::DesignationList;
+use crate::types::remainder_limit;
 
 #[update(name = "transfer")]
 #[candid_method(update)]
-
-
-
 pub fn transfer(to: Principal, value: Nat, fee_limit: Option<Nat>) -> TxReceipt {
     let from = ic::caller();
     let state = State::get();
@@ -29,7 +28,7 @@ pub fn transfer(to: Principal, value: Nat, fee_limit: Option<Nat>) -> TxReceipt 
 	let mut des = find_designation(from, DesignationList);
 	let mut max_remnant = remainder_limit(des, DesignationList);
 	if max_remnant < balance_of(from) - fee.clone()
-		return Err(TxError::InsufficientBalance);
+		{return Err(TxError::InsufficientBalance);}
     let bidding_state = BiddingState::get();
     let fee_ratio = bidding_state.borrow().fee_ratio;
 
@@ -595,6 +594,3 @@ mod tests {
         }
     }
 }
-
-newdip20_transactions.txt
-Displaying newdip20_transactions.txt.

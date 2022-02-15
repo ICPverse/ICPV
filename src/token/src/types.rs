@@ -1,6 +1,6 @@
 use common::types::Metadata;
 use std::collections::{HashMap, HashSet};
-use candid::{CandidType, Deserialize, Nat, Principal};
+use candid::{CandidType, Deserialize, Nat, Principal,Add};
 use chrono::prelude::*;
 
 
@@ -102,7 +102,7 @@ pub struct Designation{
 }
 pub static mut DesignationList: Option<Vec<Designation>> = None;
 
-#[init]
+
 pub fn init_dl() {
     unsafe {
         DesignationList = Some(Vec::new());
@@ -124,8 +124,7 @@ pub fn find_designation(wallet: Principal, dlist: Vec<Designation>) -> Designati
 			
 	}
 	if i == dlist.len()
-    {Ok(Designation{owner: Principal, role: "NA".to_string(), assignment_time: Utc::now().timestamp(),tokens: 1});
-}
+    {Ok(Designation{owner: Principal, role: "NA".to_string(), assignment_time: Utc::now().timestamp(),tokens: (1 as candid::Nat)});}
 	else{
         Ok(dlist[i]);
     }
@@ -142,8 +141,8 @@ pub fn remainder_limit(des: Designation, dlist: Vec<Designation>) -> Nat {
 		let mut days_elapsed = time_elapsed/(60*60*24);
 		match days_elapsed {
 			0..=90 => return des.tokens,
-			90..=180 => return 0.75*des.tokens,
-			180..=270 => return 0.5*des.tokens,
+			90..=180 => return 0.75*(des.tokens.to_f32()),
+			180..=270 => return 0.5*(des.tokens.to_f32()),
 			_ => return 0,
 		
 		}
