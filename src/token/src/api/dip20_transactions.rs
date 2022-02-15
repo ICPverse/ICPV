@@ -1,32 +1,3 @@
-
-Conversation opened. 1 read message.
-
-Skip to content
-Using Gmail with screen readers
-Meet
-New meeting
-Join a meeting
-Hangouts
-Finalized Files for IS Meet
-Inbox
-ICPVerse Admin
-	
-AttachmentsFeb 10, 2022, 8:19 PM (5 days ago)
-	
-to me
-These are the changes. See if it makes sense. The location for designation.rs is :
-
-IS20-main\src\token\src\types
-
-	Virus-free. www.avg.com
-3 Attachments
-	
-Thanks, I'll check them out.
-Thanks a lot.
-Got them, thanks!
-	
-	
-
 use crate::api::dip20_meta::{allowance, balance_of};
 use crate::api::is20_auction::auction_principal;
 use crate::state::{Balances, BiddingState, State};
