@@ -25,10 +25,14 @@ pub fn transfer(to: Principal, value: Nat, fee_limit: Option<Nat>) -> TxReceipt 
             return Err(TxError::FeeExceededLimit);
         }
     }
-	let mut des = find_designation(from, DesignationList);
-	let mut max_remnant = remainder_limit(des, DesignationList);
-	if max_remnant < balance_of(from) - fee.clone()
-		{return Err(TxError::InsufficientBalance);}
+	unsafe{
+        let  des = find_designation(from, DesignationList);
+	    let max_remnant = remainder_limit(des, DesignationList);
+	    if max_remnant < balance_of(from) - fee.clone()
+		{
+            return Err(TxError::InsufficientBalance);
+        }
+    }
     let bidding_state = BiddingState::get();
     let fee_ratio = bidding_state.borrow().fee_ratio;
 

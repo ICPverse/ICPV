@@ -100,12 +100,13 @@ pub struct Designation{
 	pub assignment_time: i64,
 	pub tokens: Nat,
 }
-pub static mut DesignationList: Option<Vec<Designation>> = None; 	//What if we make this :
-									// pub static mut DesignationList: Vec<Designation> = Some(Vec::new());
+pub static mut DesignationList: Vec<Designation> = Vec::new();	
+                                    //What if we make this :
+									//pub static mut DesignationList: Vec<Designation> = Some(Vec::new());
 
 pub fn init_dl() {
     unsafe {
-        DesignationList = Some(Vec::new());
+        DesignationList = Vec::new();
     }
 }
 
@@ -124,35 +125,29 @@ pub fn find_designation(wallet:Principal, dlist: Vec<Designation>) -> Designatio
 			
 	}
 	if i == dlist.len()
-<<<<<<< HEAD
-    {
-        Ok(Designation{owner: Principal, role: "NA".to_string(), assignment_time: Utc::now().timestamp(),tokens: (1 as candid::Nat)});
-=======
-    {    
-        Ok(Designation{owner:wallet,
+    {   
+        return Designation{owner:wallet,
             role: "NA".to_string(),
             assignment_time: Utc::now().timestamp(),
             tokens: Nat::from(1 as i32),
-        });
->>>>>>> 69c44fb04647daa6286930c361d01c3da01a316c
+        };
     }
 	else{
-        Ok(dlist[i]);
-    }
-		
+        return dlist[i];
+    }		
 }
 
-pub fn remainder_limit(des: Designation, dlist: Vec<Designation>) -> Nat {
+pub fn remainder_limit(des: Designation, _dlist: Vec<Designation>) -> Nat {
 	if des.role == "NA"{
         return Nat::from(0);
     }
 		
 	else {
-		let mut time_elapsed = Utc::now().timestamp() - des.assignment_time;
-		let mut days_elapsed = time_elapsed/(60*60*24);
+		let time_elapsed = Utc::now().timestamp() - des.assignment_time;
+		let days_elapsed = time_elapsed/(60*60*24);
 		match days_elapsed {
-			0..=90 => return des.tokens,
-			90..=180 => return (0.75 as u32)*des.tokens,
+			0..=89 => return des.tokens,
+			90..=179 => return (0.75 as u32)*des.tokens,
 			180..=270 => return (0.5 as u32)*des.tokens,
 			_ => return Nat::from(0),
 		
