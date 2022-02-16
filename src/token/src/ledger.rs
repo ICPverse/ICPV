@@ -71,22 +71,22 @@ impl Ledger {
 	
 	pub fn transfer_to_investor(&mut self, from: Principal, to: Principal, amount: Nat, fee: Nat) -> Nat {
         unsafe{let id = self.next_id();
-        self.push(TxRecord::transfer(id.clone(), from, to, amount, fee));
-		DesignationList.push(Designation{owner: to, role: "investor".to_string(), assignment_time: Utc::now().timestamp(),tokens: amount});
+        self.push(TxRecord::transfer(id.clone(), from, to, amount.clone(), fee));
+		DesignationList.push(Designation{owner: to, role: "investor".to_string(), assignment_time: Utc::now().timestamp(),tokens: amount.clone()});
         id}
     }
 	
 	pub fn transfer_to_founder(&mut self, from: Principal, to: Principal, amount: Nat, fee: Nat) -> Nat {
         unsafe{let id = self.next_id();
-        self.push(TxRecord::transfer(id.clone(), from, to, amount, fee));
-		DesignationList.push(Designation{owner: to, role: "founder".to_string(), assignment_time: Utc::now().timestamp(),tokens: amount});
+        self.push(TxRecord::transfer(id.clone(), from, to, amount.clone(), fee));
+		DesignationList.push(Designation{owner: to, role: "founder".to_string(), assignment_time: Utc::now().timestamp(),tokens: amount.clone()});
         id}
     }
 	
 	pub fn transfer_to_advisor(&mut self, from: Principal, to: Principal, amount: Nat, fee: Nat) -> Nat {
         unsafe{let id = self.next_id();
-        self.push(TxRecord::transfer(id.clone(), from, to, amount, fee));
-		DesignationList.push(Designation{owner: to, role: "advisor".to_string(), assignment_time: Utc::now().timestamp(),tokens: amount});
+        self.push(TxRecord::transfer(id.clone(), from, to, amount.clone(), fee));
+		DesignationList.push(Designation{owner: to, role: "advisor".to_string(), assignment_time: Utc::now().timestamp(),tokens: amount.clone()});
         id}
     }
 
