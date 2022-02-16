@@ -100,8 +100,8 @@ pub struct Designation{
 	pub assignment_time: i64,
 	pub tokens: Nat,
 }
-pub static mut DesignationList: Option<Vec<Designation>> = None;
-
+pub static mut DesignationList: Option<Vec<Designation>> = None; 	//What if we make this :
+									// pub static mut DesignationList: Vec<Designation> = Some(Vec::new());
 
 pub fn init_dl() {
     unsafe {
