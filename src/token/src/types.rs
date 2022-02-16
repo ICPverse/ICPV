@@ -1,6 +1,6 @@
 use common::types::Metadata;
 use std::collections::{HashMap, HashSet};
-use candid::{CandidType, Deserialize, Nat, Principal,Add};
+use candid::{CandidType, Deserialize, Nat, Principal};
 use chrono::prelude::*;
 
 
@@ -124,7 +124,9 @@ pub fn find_designation(wallet: Principal, dlist: Vec<Designation>) -> Designati
 			
 	}
 	if i == dlist.len()
-    {Ok(Designation{owner: Principal, role: "NA".to_string(), assignment_time: Utc::now().timestamp(),tokens: (1 as candid::Nat)});}
+    {
+        Ok(Designation{owner: Principal, role: "NA".to_string(), assignment_time: Utc::now().timestamp(),tokens: (1 as candid::Nat)});
+    }
 	else{
         Ok(dlist[i]);
     }
