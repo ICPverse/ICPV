@@ -24,6 +24,7 @@ static PUBLIC_METHODS: &[&str] = &[
     "owner",
     "symbol",
     "totalSupply",
+    "transferToInvestor",
 ];
 
 static OWNER_METHODS: &[&str] = &[

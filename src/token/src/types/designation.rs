@@ -13,12 +13,12 @@ pub struct Designation{
 	pub assignment_time: chrono::DateTime,
 }
 
-static mut DesignationList: Option<Vec<Designation>> = None;
+static mut DESIGNATION_LIST: Option<Vec<Designation>> = None;
 
 #[init]
 pub fn init_dl() {
     unsafe {
-        DesignationList = Some(Vec::new());
+        DESIGNATION_LIST = Some(Vec::new());
     }
 }
 

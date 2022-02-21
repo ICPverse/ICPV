@@ -9,7 +9,7 @@ use ic_kit::{ic, Principal};
 use ic_storage::IcStorage;
 use std::collections::HashMap;
 use crate::types::find_designation;
-use crate::types::DesignationList;
+use crate::types::DESIGNATION_LIST;
 use crate::types::remainder_limit;
 
 #[update(name = "transfer")]
@@ -26,8 +26,8 @@ pub fn transfer(to: Principal, value: Nat, fee_limit: Option<Nat>) -> TxReceipt 
         }
     }
 	unsafe{
-        let  des = find_designation(from, DesignationList);
-	    let max_remnant = remainder_limit(des, DesignationList);
+        let des = find_designation(from, &DESIGNATION_LIST);
+	    let max_remnant = remainder_limit(des, &DESIGNATION_LIST);
 	    if max_remnant < balance_of(from) - fee.clone()
 		{
             return Err(TxError::InsufficientBalance);

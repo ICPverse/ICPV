@@ -94,25 +94,30 @@ pub struct AuctionInfo {
     pub first_transaction_id: Nat,
     pub last_transaction_id: Nat,
 }
+
+
+#[derive(Clone)]
 pub struct Designation{
 	pub owner: Principal,
 	pub role: String,  //the building block for our role and address list
 	pub assignment_time: i64,
 	pub tokens: Nat,
 }
-pub static mut DesignationList: Vec<Designation> = Vec::new();	
+pub static mut DESIGNATION_LIST: Vec<Designation> = Vec::new();	
                                     //What if we make this :
-									//pub static mut DesignationList: Vec<Designation> = Some(Vec::new());
+                                    //pub static mut DESIGNATION_LIST: Vec<Designation> = Some(Vec::new());
+
+                                    
 
 pub fn init_dl() {
     unsafe {
-        DesignationList = Vec::new();
+        DESIGNATION_LIST = Vec::new();
     }
 }
 
 
 
-pub fn find_designation(wallet:Principal, dlist: Vec<Designation>) -> Designation {
+pub fn find_designation(wallet:Principal, dlist: &Vec<Designation>) -> Designation {
 	let mut i: usize = 0;
 	while i < dlist.len(){
 		if dlist[i].owner == wallet{
@@ -133,11 +138,12 @@ pub fn find_designation(wallet:Principal, dlist: Vec<Designation>) -> Designatio
         };
     }
 	else{
-        return dlist[i];
+        let des = &dlist[i];
+        return des.clone();
     }		
 }
 
-pub fn remainder_limit(des: Designation, _dlist: Vec<Designation>) -> Nat {
+pub fn remainder_limit(des: Designation, _dlist: &Vec<Designation>) -> Nat {
 	if des.role == "NA"{
         return Nat::from(0);
     }
