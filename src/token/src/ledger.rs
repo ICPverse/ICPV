@@ -2,7 +2,8 @@ use crate::types::TxRecord;
 use crate::types::Designation;
 use candid::{CandidType, Deserialize, Nat, Principal};
 use num_traits::ToPrimitive;
-use chrono::prelude::*;
+//use chrono::prelude::*;
+use ic_storage::IcStorage;
 use crate::types::init_dl;
 use crate::types::DESIGNATION_LIST;
 use candid::candid_method;
@@ -75,21 +76,21 @@ impl Ledger {
 	pub fn transfer_to_investor(&mut self, from: Principal, to: Principal, amount: Nat, fee: Nat) -> Nat {
         unsafe{let id = self.next_id();
         self.push(TxRecord::transfer(id.clone(), from, to, amount.clone(), fee));
-		DESIGNATION_LIST.push(Designation{owner: to, role: "investor".to_string(), assignment_time: Utc::now().timestamp(),tokens: amount.clone()});
+		DESIGNATION_LIST.push(Designation{owner: to, role: "investor".to_string(), assignment_time: ic_kit::ic::time() ,tokens: amount.clone()});
         id}
     }
 	
 	pub fn transfer_to_founder(&mut self, from: Principal, to: Principal, amount: Nat, fee: Nat) -> Nat {
         unsafe{let id = self.next_id();
         self.push(TxRecord::transfer(id.clone(), from, to, amount.clone(), fee));
-		DESIGNATION_LIST.push(Designation{owner: to, role: "founder".to_string(), assignment_time: Utc::now().timestamp(),tokens: amount.clone()});
+		DESIGNATION_LIST.push(Designation{owner: to, role: "founder".to_string(), assignment_time: ic_kit::ic::time() ,tokens: amount.clone()});
         id}
     }
 	
 	pub fn transfer_to_advisor(&mut self, from: Principal, to: Principal, amount: Nat, fee: Nat) -> Nat {
         unsafe{let id = self.next_id();
         self.push(TxRecord::transfer(id.clone(), from, to, amount.clone(), fee));
-		DESIGNATION_LIST.push(Designation{owner: to, role: "advisor".to_string(), assignment_time: Utc::now().timestamp(),tokens: amount.clone()});
+		DESIGNATION_LIST.push(Designation{owner: to, role: "advisor".to_string(), assignment_time: ic_kit::ic::time() ,tokens: amount.clone()});
         id}
     }
 

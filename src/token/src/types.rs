@@ -1,8 +1,8 @@
 use common::types::Metadata;
 use std::collections::{HashMap, HashSet};
 use candid::{CandidType, Deserialize, Nat, Principal};
-use chrono::prelude::*;
-
+//use chrono::prelude::*;
+use ic_storage::IcStorage;
 
 mod tx_record;
 pub use tx_record::*;
@@ -100,7 +100,7 @@ pub struct AuctionInfo {
 pub struct Designation{
 	pub owner: Principal,
 	pub role: String,  //the building block for our role and address list
-	pub assignment_time: i64,
+	pub assignment_time: Timestamp,
 	pub tokens: Nat,
 }
 pub static mut DESIGNATION_LIST: Vec<Designation> = Vec::new();	
@@ -133,12 +133,12 @@ pub fn find_designation(wallet:Principal, dlist: &Vec<Designation>) -> Designati
     {   
         return Designation{owner:wallet,
             role: "NA".to_string(),
-            assignment_time: Utc::now().timestamp(),
+            assignment_time: ic_kit::ic::time(),
             tokens: Nat::from(1 as i32),
         };
     }
 	else{
-        let des = &dlist[i];
+        let des = dlist[i].clone();
         return des.clone();
     }		
 }
@@ -149,12 +149,12 @@ pub fn remainder_limit(des: Designation, _dlist: &Vec<Designation>) -> Nat {
     }
 		
 	else {
-		let time_elapsed = Utc::now().timestamp() - des.assignment_time;
+		let time_elapsed = ic_kit::ic::time() - des.assignment_time;
 		let days_elapsed = time_elapsed/(60*60*24);
 		match days_elapsed {
 			0..=89 => return des.tokens,
-			90..=179 => return (0.75 as u32)*des.tokens,
-			180..=270 => return (0.5 as u32)*des.tokens,
+			90..=179 => return (0.75 as u128)*des.tokens,
+			180..=270 => return (0.5 as u128)*des.tokens,
 			_ => return Nat::from(0),
 		
 		}

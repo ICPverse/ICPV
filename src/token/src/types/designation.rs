@@ -1,4 +1,4 @@
-use crate::types::{Operation, TransactionStatus};
+/*use crate::types::{Operation, TransactionStatus};
 use candid::{CandidType, Deserialize, Int, Nat};
 use candid::types::Type::Principal;
 use ic_kit::ic;
@@ -54,3 +54,4 @@ pub fn remainder_limit(des: Designation, dlist: Vec<Designation>) -> Nat {
 	}
 		
 }
+*/
