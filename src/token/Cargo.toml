@@ -5,7 +5,6 @@ version = "0.1.0"
 
 [dependencies]
 assert-panic = "1.0"
-chrono = "0.4"
 candid = "0.7"
 common = {path = "../common"}
 ic-cdk = "0.3"

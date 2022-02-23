@@ -2,6 +2,7 @@ use crate::api::dip20_meta::{allowance, balance_of};
 use crate::api::is20_auction::auction_principal;
 use crate::state::{Balances, BiddingState, State};
 use crate::types::{TxError, TxReceipt};
+use crate::types::Designation;
 use crate::utils::check_caller_is_owner;
 use candid::{candid_method, Nat};
 use ic_cdk_macros::*;
@@ -20,17 +21,21 @@ pub fn transfer(to: Principal, value: Nat, fee_limit: Option<Nat>) -> TxReceipt 
     let mut state = state.borrow_mut();
     let stats = state.stats();
     let fee = stats.fee.clone();
+    ic_cdk::print("hi from transfer \n");
     if let Some(fee_limit) = fee_limit {
         if fee > fee_limit {
             return Err(TxError::FeeExceededLimit);
         }
     }
-	unsafe{
-        let des = find_designation(from, &DESIGNATION_LIST);
-	    let max_remnant = remainder_limit(des, &DESIGNATION_LIST);
-	    if max_remnant < balance_of(from) - fee.clone()
+    unsafe{
+        let des: Designation = find_designation(from);
+        let max_remnant = remainder_limit(des);
+	ic_cdk::print("We are here. \n");
+	//ic_cdk::print(max_remnant.to_string());
+        if max_remnant > balance_of(from) - value.clone() - fee.clone()
 		{
-            return Err(TxError::InsufficientBalance);
+		ic_cdk::print("you are founder or investor! \n");
+                return Err(TxError::InsufficientBalance);
         }
     }
     let bidding_state = BiddingState::get();
@@ -45,6 +50,7 @@ pub fn transfer(to: Principal, value: Nat, fee_limit: Option<Nat>) -> TxReceipt 
 
     let id = state.ledger_mut().transfer(from, to, value, fee);
     state.notifications.insert(id.clone());
+    ic_cdk::print("Reaching here. \n");
     Ok(id)
 }
 

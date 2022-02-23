@@ -3,6 +3,8 @@ use std::collections::{HashMap, HashSet};
 use candid::{CandidType, Deserialize, Nat, Principal};
 //use chrono::prelude::*;
 use ic_storage::IcStorage;
+use ic_cdk_macros::*;
+use candid::candid_method;
 
 mod tx_record;
 pub use tx_record::*;
@@ -95,8 +97,7 @@ pub struct AuctionInfo {
     pub last_transaction_id: Nat,
 }
 
-
-#[derive(Clone)]
+#[derive(Deserialize, CandidType, Clone, Debug)]
 pub struct Designation{
 	pub owner: Principal,
 	pub role: String,  //the building block for our role and address list
@@ -108,7 +109,8 @@ pub static mut DESIGNATION_LIST: Vec<Designation> = Vec::new();
                                     //pub static mut DESIGNATION_LIST: Vec<Designation> = Some(Vec::new());
 
                                     
-
+#[update(name = "init_dl")]
+#[candid_method(update)]
 pub fn init_dl() {
     unsafe {
         DESIGNATION_LIST = Vec::new();
@@ -116,11 +118,25 @@ pub fn init_dl() {
 }
 
 
+#[update(name = "sizeDl")]
+#[candid_method(update,rename = "sizeDl")]
+#[ic_cdk_macros::query]
+pub fn size_dl() {
+    unsafe {
+        format!("Length of designation list is {}.",DESIGNATION_LIST.len());
+    }
+}
 
-pub fn find_designation(wallet:Principal, dlist: &Vec<Designation>) -> Designation {
+
+
+#[ic_cdk_macros::query]
+pub fn find_designation(wallet:Principal) -> Designation {
 	let mut i: usize = 0;
-	while i < dlist.len(){
-		if dlist[i].owner == wallet{
+	ic_cdk::print("designation list of size... \n");
+	unsafe{
+	ic_cdk::print(DESIGNATION_LIST.len().to_string());
+	while i < DESIGNATION_LIST.len(){
+		if DESIGNATION_LIST[i].owner == wallet{
             break;
         }
 			
@@ -129,21 +145,23 @@ pub fn find_designation(wallet:Principal, dlist: &Vec<Designation>) -> Designati
         }   
 			
 	}
-	if i == dlist.len()
+	if i >= DESIGNATION_LIST.len()
     {   
+	ic_cdk::print("New wallet");
         return Designation{owner:wallet,
             role: "NA".to_string(),
             assignment_time: ic_kit::ic::time(),
-            tokens: Nat::from(1 as i32),
+            tokens: Nat::from(1 as u128),
         };
     }
 	else{
-        let des = dlist[i].clone();
+        let des: Designation = DESIGNATION_LIST[i].clone();
         return des.clone();
-    }		
+    }
+}		
 }
 
-pub fn remainder_limit(des: Designation, _dlist: &Vec<Designation>) -> Nat {
+pub fn remainder_limit(des: Designation) -> Nat {
 	if des.role == "NA"{
         return Nat::from(0);
     }
