@@ -1,3 +1,7 @@
+Special Thanks to:
+1. Maximkaaa (Max) from the Infinity Swap team, majority of whose code we are working on
+2. glinuxdev for helping with valuable debugging and other suggestions
+
 The token $ICPV for ICPverse, which will adhere to the IS20 standard, which is used for $ICP projects.
 
 For vesting, changes in following files have been done without changing the existing code:
