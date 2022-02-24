@@ -118,13 +118,17 @@ pub fn init_dl() {
 }
 
 
-#[update(name = "sizeDl")]
-#[candid_method(update,rename = "sizeDl")]
+#[query(name = "sizeDl")]
+#[candid_method(query,rename = "sizeDl")]
 #[ic_cdk_macros::query]
-pub fn size_dl() {
+pub fn size_dl() -> usize{
+    let mut size = 0;
     unsafe {
-        format!("Length of designation list is {}.",DESIGNATION_LIST.len());
+	size = DESIGNATION_LIST.len();
+        ic_cdk::print(size.to_string());
+
     }
+    size
 }
 
 

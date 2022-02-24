@@ -7,7 +7,7 @@ use ic_storage::IcStorage;
 use crate::types::init_dl;
 use crate::types::DESIGNATION_LIST;
 use candid::candid_method;
-
+use ic_cdk_macros::update;
 
 const MAX_HISTORY_LENGTH: usize = 1_000_000;
 const HISTORY_REMOVAL_BATCH_SIZE: usize = 10_000;
@@ -71,8 +71,9 @@ impl Ledger {
 
         id
     }
-	
-    #[candid_method(query, rename = "transferToInvestor")]
+
+   /* #[update(name = "transferToInvestor")]
+    #[candid_method(update, rename = "transferToInvestor")]
 	pub fn transfer_to_investor(&mut self, from: Principal, to: Principal, amount: Nat, fee: Nat) -> Nat {
         unsafe{let id = self.next_id();
         self.push(TxRecord::transfer(id.clone(), from, to, amount.clone(), fee));
@@ -93,7 +94,7 @@ impl Ledger {
 		DESIGNATION_LIST.push(Designation{owner: to, role: "advisor".to_string(), assignment_time: ic_kit::ic::time() ,tokens: amount.clone()});
         id}
     }
-
+*/
     pub fn transfer_from(
         &mut self,
         caller: Principal,

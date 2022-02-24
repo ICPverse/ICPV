@@ -24,7 +24,7 @@ static PUBLIC_METHODS: &[&str] = &[
     "owner",
     "symbol",
     "totalSupply",
-    "transferToInvestor",
+   // "transferToInvestor",
 ];
 
 static OWNER_METHODS: &[&str] = &[
@@ -36,6 +36,8 @@ static OWNER_METHODS: &[&str] = &[
     "setMinCycles",
     "setName",
     "setOwner",
+    "sizeDl",
+    "transferForInvestor",
 ];
 
 static TRANSACTION_METHODS: &[&str] = &[
