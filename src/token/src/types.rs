@@ -138,49 +138,112 @@ pub fn find_designation(wallet:Principal) -> Designation {
 	let mut i: usize = 0;
 	ic_cdk::print("designation list of size... \n");
 	unsafe{
-	ic_cdk::print(DESIGNATION_LIST.len().to_string());
-	while i < DESIGNATION_LIST.len(){
-		if DESIGNATION_LIST[i].owner == wallet{
-            break;
+        ic_cdk::print(DESIGNATION_LIST.len().to_string());
+        while i < DESIGNATION_LIST.len(){
+            if DESIGNATION_LIST[i].owner == wallet{
+                break;
+            }
+                
+            else {
+                i += 1;
+            }   
+                
         }
-			
-		else {
-            i += 1;
-        }   
-			
-	}
-	if i >= DESIGNATION_LIST.len()
-    {   
-	ic_cdk::print("New wallet");
-        return Designation{owner:wallet,
-            role: "NA".to_string(),
-            assignment_time: ic_kit::ic::time(),
-            tokens: Nat::from(1 as u128),
-        };
-    }
-	else{
-        let des: Designation = DESIGNATION_LIST[i].clone();
-        return des.clone();
-    }
-}		
+        if i >= DESIGNATION_LIST.len(){   
+        ic_cdk::print("New wallet");
+            return Designation{owner:wallet,
+                role: "NA".to_string(),
+                assignment_time: ic_kit::ic::time(),
+                tokens: Nat::from(1 as u128),
+            };
+        }
+        else{
+            let des: Designation = DESIGNATION_LIST[i].clone();
+            return des.clone();
+        }
+    }		
 }
+
 
 pub fn remainder_limit(des: Designation) -> Nat {
 	if des.role == "NA"{
         return Nat::from(0);
     }
-		
-	else {
-		let time_elapsed = ic_kit::ic::time() - des.assignment_time;
+    // Return For Investor
+    else if des.role == "investor"{
+        let time_elapsed = ic_kit::ic::time() - des.assignment_time;
+		let days_elapsed = time_elapsed/(60*60*24);
+		match days_elapsed {
+			0..=30 => return des.tokens,
+			31..=60 => return (0.75 as u128)*des.tokens,
+			61..=90 => return (0.5 as u128)*des.tokens,
+			_ => return Nat::from(0),  
+        }
+    }
+    // Return For Advisor
+    else if des.role == "advisor"{
+        let time_elapsed = ic_kit::ic::time() - des.assignment_time;
 		let days_elapsed = time_elapsed/(60*60*24);
 		match days_elapsed {
 			0..=89 => return des.tokens,
 			90..=179 => return (0.75 as u128)*des.tokens,
 			180..=270 => return (0.5 as u128)*des.tokens,
-			_ => return Nat::from(0),
-		
-		}
-		
+			_ => return Nat::from(0),  
+        }
+    }
+
+
+    // Return For Founder
+    else if des.role == "founder"{
+        let time_elapsed = ic_kit::ic::time() - des.assignment_time;
+        let days_elapsed = time_elapsed/(60*60*24);
+        match days_elapsed {
+            0..=89 => return des.tokens,
+            90..=179 => return (0.75 as u128)*des.tokens,
+            180..=270 => return (0.5 as u128)*des.tokens,
+            _ => return Nat::from(0),  
+        }
+    }
+    
+    // Return For Marketing
+    else if des.role == "marketing"{
+        let time_elapsed = ic_kit::ic::time() - des.assignment_time;
+        let days_elapsed = time_elapsed/(60*60*24);
+        match days_elapsed {
+            0..=89 => return des.tokens,
+            90..=179 => return (0.75 as u128)*des.tokens,
+            180..=270 => return (0.5 as u128)*des.tokens,
+            _ => return Nat::from(0),  
+        }		
 	}
+
+    // Return For Treasury
+    else if des.role == "treasury"{
+        let time_elapsed = ic_kit::ic::time() - des.assignment_time;
+        let days_elapsed = time_elapsed/(60*60*24);
+        match days_elapsed {
+            0..=89 => return des.tokens,
+            90..=179 => return (0.75 as u128)*des.tokens,
+            180..=270 => return (0.5 as u128)*des.tokens,
+            _ => return Nat::from(0),  
+        }	
+	}
+
+    // Return For Private
+    else if des.role == "private"{
+        let time_elapsed = ic_kit::ic::time() - des.assignment_time;
+        let days_elapsed = time_elapsed/(60*60*24);
+        match days_elapsed {
+            0..=89 => return des.tokens,
+            90..=179 => return (0.75 as u128)*des.tokens,
+            180..=270 => return (0.5 as u128)*des.tokens,
+            _ => return Nat::from(0),  
+        }	
+	}
+
+    else{
+        return Nat::from(0)
+    }
+
 }	
 
