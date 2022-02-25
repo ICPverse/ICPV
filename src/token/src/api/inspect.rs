@@ -38,6 +38,13 @@ static OWNER_METHODS: &[&str] = &[
     "setOwner",
     "sizeDl",
     "transferForInvestor",
+    "transferForPrivate",
+    "transferForAdvisor",
+    "transferForFounder",
+    "transferForTreasury",
+    "transferForMarketing",
+    "transferForPublic",
+
 ];
 
 static TRANSACTION_METHODS: &[&str] = &[

@@ -167,20 +167,77 @@ pub fn find_designation(wallet:Principal) -> Designation {
 
 pub fn remainder_limit(des: Designation) -> Nat {
 	if des.role == "NA"{
-        return Nat::from(0);
+	ic_cdk::print((des.assignment_time/1000000000).to_string());
+	ic_cdk::print("\n");
+        return Nat::from(0 as u32);
     }
 		
-	else {
-		let time_elapsed = ic_kit::ic::time() - des.assignment_time;
+	else if des.role == "founder" {
+		let time_elapsed = (ic_kit::ic::time() - des.assignment_time)/1000000000;
 		let days_elapsed = time_elapsed/(60*60*24);
 		match days_elapsed {
 			0..=89 => return des.tokens,
-			90..=179 => return (0.75 as u128)*des.tokens,
-			180..=270 => return (0.5 as u128)*des.tokens,
-			_ => return Nat::from(0),
+			90..=179 => return Nat::from((3 as u128)*des.tokens/(4 as u128) as u128),
+			180..=270 => return Nat::from(des.tokens/(2 as u128) as u128),
+			_ => return Nat::from(0 as u32),
 		
 		}
 		
+	}
+	else if des.role == "advisor" {
+                let time_elapsed = (ic_kit::ic::time() - des.assignment_time)/1000000000;
+                let days_elapsed = time_elapsed/(60*60*24);
+                match days_elapsed {
+                        0..=89 => return des.tokens,
+			90..=179 => return Nat::from((3 as u128)*des.tokens/(4 as u128) as u128),
+                        180..=270 => return Nat::from(des.tokens/(2 as u128) as u128),
+
+                        __ => return Nat::from(0 as u32),
+
+                }
+
+        }
+	else if des.role == "investor" {
+                let time_elapsed = (ic_kit::ic::time() - des.assignment_time)/1000000000;
+                let days_elapsed = time_elapsed/(60*60*24);
+                match days_elapsed {
+                        0..=89 => return des.tokens,
+                        90..=179 => return Nat::from((3 as u128)*des.tokens/(4 as u128) as u128),
+                        180..=270 => return Nat::from(des.tokens/(2 as u128) as u128),
+
+                        _ => return Nat::from(0 as u32),
+
+                }
+
+        }
+	else if des.role == "private" {
+                let time_elapsed = (ic_kit::ic::time() - des.assignment_time)/1000000000;
+                let days_elapsed = time_elapsed/(60*60*24);
+                match days_elapsed {
+                        0..=89 => return des.tokens,
+                        90..=179 => return Nat::from((3 as u128)*des.tokens/(4 as u128) as u128),
+                        180..=270 => return Nat::from(des.tokens/(2 as u128) as u128),
+
+                        _ => return Nat::from(0 as u32),
+
+                }
+
+        }
+	else if des.role == "marketing" {
+                let time_elapsed = (ic_kit::ic::time() - des.assignment_time)/1000000000;
+                let days_elapsed = time_elapsed/(60*60*24);
+                match days_elapsed {
+                        0..=89 => return des.tokens,
+                        90..=179 => return Nat::from((3 as u128)*des.tokens/(4 as u128) as u128),
+                        180..=270 => return Nat::from(des.tokens/(2 as u128) as u128),
+
+                        _ => return Nat::from(0 as u32),
+
+                }
+
+        }
+	else {
+		return Nat::from(0 as u32);
 	}
 }	
 

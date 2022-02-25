@@ -94,12 +94,286 @@ pub fn transfer_for_investor(to: Principal, value: Nat, fee_limit: Option<Nat>) 
     }
     let id = state.ledger_mut().transfer(from, to, value, fee);
     state.notifications.insert(id.clone());
-    //DESIGNATION_LIST.push(Designation{owner: to, role: "investor".to_string(), assignment_time: ic_kit::ic::time() ,tokens: value.clone()});
-
+   
     ic_cdk::print("Reaching here. \n");
     Ok(id)
 }
 
+#[update(name = "transferForPrivate")]
+#[candid_method(update, rename = "transferForPrivate")]
+pub fn transfer_for_private(to: Principal, value: Nat, fee_limit: Option<Nat>) -> TxReceipt {
+    let from = ic::caller();
+    let state = State::get();
+    let mut state = state.borrow_mut();
+    let stats = state.stats();
+    let fee = stats.fee.clone();
+    ic_cdk::print("hi from transfer for private \n");
+    if let Some(fee_limit) = fee_limit {
+        if fee > fee_limit {
+            return Err(TxError::FeeExceededLimit);
+        }
+    }
+    unsafe{
+        let des: Designation = find_designation(from);
+        let max_remnant = remainder_limit(des);
+        ic_cdk::print("We are here. \n");
+        //ic_cdk::print(max_remnant.to_string());
+        if max_remnant > balance_of(from) - value.clone() - fee.clone()
+                {
+                ic_cdk::print("you are founder or investor! \n");
+                return Err(TxError::InsufficientBalance);
+        }
+    }
+    let bidding_state = BiddingState::get();
+    let fee_ratio = bidding_state.borrow().fee_ratio;
+
+    if balance_of(from) < value.clone() + fee.clone() {
+        return Err(TxError::InsufficientBalance);
+    }
+
+    _charge_fee(from, stats.fee_to, fee.clone(), fee_ratio);
+    _transfer(from, to, value.clone());
+
+    unsafe{
+        DESIGNATION_LIST.push(Designation{owner: to, role: "private".to_string(), assignment_time: ic_kit::ic::time() ,tokens: value.clone()});
+    }
+    let id = state.ledger_mut().transfer(from, to, value, fee);
+    state.notifications.insert(id.clone());
+
+    ic_cdk::print("Reaching here. \n");
+    Ok(id)
+
+}
+
+#[update(name = "transferForFounder")]
+#[candid_method(update, rename = "transferForFounder")]
+pub fn transfer_for_founder(to: Principal, value: Nat, fee_limit: Option<Nat>) -> TxReceipt {
+    let from = ic::caller();
+    let state = State::get();
+    let mut state = state.borrow_mut();
+    let stats = state.stats();
+    let fee = stats.fee.clone();
+    ic_cdk::print("hi from transfer for founder \n");
+    if let Some(fee_limit) = fee_limit {
+        if fee > fee_limit {
+            return Err(TxError::FeeExceededLimit);
+        }
+    }
+    unsafe{
+        let des: Designation = find_designation(from);
+        let max_remnant = remainder_limit(des);
+        ic_cdk::print("We are here. \n");
+        //ic_cdk::print(max_remnant.to_string());
+        if max_remnant > balance_of(from) - value.clone() - fee.clone()
+                {
+                ic_cdk::print("you are founder or investor! \n");
+                return Err(TxError::InsufficientBalance);
+        }
+    }
+    let bidding_state = BiddingState::get();
+    let fee_ratio = bidding_state.borrow().fee_ratio;
+
+    if balance_of(from) < value.clone() + fee.clone() {
+        return Err(TxError::InsufficientBalance);
+    }
+
+    _charge_fee(from, stats.fee_to, fee.clone(), fee_ratio);
+    _transfer(from, to, value.clone());
+
+    unsafe{
+        DESIGNATION_LIST.push(Designation{owner: to, role: "founder".to_string(), assignment_time: ic_kit::ic::time() ,tokens: value.clone()});
+    }
+    let id = state.ledger_mut().transfer(from, to, value, fee);
+    state.notifications.insert(id.clone());
+
+    ic_cdk::print("Reaching here. \n");
+    Ok(id)
+
+}
+
+#[update(name = "transferForAdvisor")]
+#[candid_method(update, rename = "transferForAdvisor")]
+pub fn transfer_for_advisor(to: Principal, value: Nat, fee_limit: Option<Nat>) -> TxReceipt {
+    let from = ic::caller();
+    let state = State::get();
+    let mut state = state.borrow_mut();
+    let stats = state.stats();
+    let fee = stats.fee.clone();
+    ic_cdk::print("hi from transfer for advisor \n");
+    if let Some(fee_limit) = fee_limit {
+        if fee > fee_limit {
+            return Err(TxError::FeeExceededLimit);
+        }
+    }
+    unsafe{
+        let des: Designation = find_designation(from);
+        let max_remnant = remainder_limit(des);
+        ic_cdk::print("We are here. \n");
+        //ic_cdk::print(max_remnant.to_string());
+        if max_remnant > balance_of(from) - value.clone() - fee.clone()
+                {
+                ic_cdk::print("you are founder or investor! \n");
+                return Err(TxError::InsufficientBalance);
+        }
+    }
+    let bidding_state = BiddingState::get();
+    let fee_ratio = bidding_state.borrow().fee_ratio;
+
+    if balance_of(from) < value.clone() + fee.clone() {
+        return Err(TxError::InsufficientBalance);
+    }
+
+    _charge_fee(from, stats.fee_to, fee.clone(), fee_ratio);
+    _transfer(from, to, value.clone());
+
+    unsafe{
+        DESIGNATION_LIST.push(Designation{owner: to, role: "advisor".to_string(), assignment_time: ic_kit::ic::time() ,tokens: value.clone()});
+    }
+    let id = state.ledger_mut().transfer(from, to, value, fee);
+    state.notifications.insert(id.clone());
+
+    ic_cdk::print("Reaching here. \n");
+    Ok(id)
+
+}
+
+#[update(name = "transferForPublic")]
+#[candid_method(update, rename = "transferForPublic")]
+pub fn transfer_for_public(to: Principal, value: Nat, fee_limit: Option<Nat>) -> TxReceipt {
+    let from = ic::caller();
+    let state = State::get();
+    let mut state = state.borrow_mut();
+    let stats = state.stats();
+    let fee = stats.fee.clone();
+    ic_cdk::print("hi from transfer for public \n");
+    if let Some(fee_limit) = fee_limit {
+        if fee > fee_limit {
+            return Err(TxError::FeeExceededLimit);
+        }
+    }
+    unsafe{
+        let des: Designation = find_designation(from);
+        let max_remnant = remainder_limit(des);
+        ic_cdk::print("We are here. \n");
+        //ic_cdk::print(max_remnant.to_string());
+        if max_remnant > balance_of(from) - value.clone() - fee.clone()
+                {
+                ic_cdk::print("you are founder or investor! \n");
+                return Err(TxError::InsufficientBalance);
+        }
+    }
+    let bidding_state = BiddingState::get();
+    let fee_ratio = bidding_state.borrow().fee_ratio;
+
+    if balance_of(from) < value.clone() + fee.clone() {
+        return Err(TxError::InsufficientBalance);
+    }
+
+    _charge_fee(from, stats.fee_to, fee.clone(), fee_ratio);
+    _transfer(from, to, value.clone());
+
+    unsafe{
+        DESIGNATION_LIST.push(Designation{owner: to, role: "public".to_string(), assignment_time: ic_kit::ic::time() ,tokens: value.clone()});
+    }
+    let id = state.ledger_mut().transfer(from, to, value, fee);
+    state.notifications.insert(id.clone());
+
+    ic_cdk::print("Reaching here. \n");
+    Ok(id)
+
+}
+
+#[update(name = "transferForTreasury")]
+#[candid_method(update, rename = "transferForTreasury")]
+pub fn transfer_for_treasury(to: Principal, value: Nat, fee_limit: Option<Nat>) -> TxReceipt {
+    let from = ic::caller();
+    let state = State::get();
+    let mut state = state.borrow_mut();
+    let stats = state.stats();
+    let fee = stats.fee.clone();
+    ic_cdk::print("hi from transfer for treasury \n");
+    if let Some(fee_limit) = fee_limit {
+        if fee > fee_limit {
+            return Err(TxError::FeeExceededLimit);
+        }
+    }
+    unsafe{
+        let des: Designation = find_designation(from);
+        let max_remnant = remainder_limit(des);
+        ic_cdk::print("We are here. \n");
+        //ic_cdk::print(max_remnant.to_string());
+        if max_remnant > balance_of(from) - value.clone() - fee.clone()
+                {
+                ic_cdk::print("you are founder or investor! \n");
+                return Err(TxError::InsufficientBalance);
+        }
+    }
+    let bidding_state = BiddingState::get();
+    let fee_ratio = bidding_state.borrow().fee_ratio;
+
+    if balance_of(from) < value.clone() + fee.clone() {
+        return Err(TxError::InsufficientBalance);
+    }
+
+    _charge_fee(from, stats.fee_to, fee.clone(), fee_ratio);
+    _transfer(from, to, value.clone());
+
+    unsafe{
+        DESIGNATION_LIST.push(Designation{owner: to, role: "treasury".to_string(), assignment_time: ic_kit::ic::time() ,tokens: value.clone()});
+    }
+    let id = state.ledger_mut().transfer(from, to, value, fee);
+    state.notifications.insert(id.clone());
+
+    ic_cdk::print("Reaching here. \n");
+    Ok(id)
+
+}
+
+#[update(name = "transferForMarketing")]
+#[candid_method(update, rename = "transferForMarketing")]
+pub fn transfer_for_marketing(to: Principal, value: Nat, fee_limit: Option<Nat>) -> TxReceipt {
+    let from = ic::caller();
+    let state = State::get();
+    let mut state = state.borrow_mut();
+    let stats = state.stats();
+    let fee = stats.fee.clone();
+    ic_cdk::print("hi from transfer for marketing \n");
+    if let Some(fee_limit) = fee_limit {
+        if fee > fee_limit {
+            return Err(TxError::FeeExceededLimit);
+        }
+    }
+    unsafe{
+        let des: Designation = find_designation(from);
+        let max_remnant = remainder_limit(des);
+        ic_cdk::print("We are here. \n");
+        //ic_cdk::print(max_remnant.to_string());
+        if max_remnant > balance_of(from) - value.clone() - fee.clone()
+                {
+                ic_cdk::print("you are founder or investor! \n");
+                return Err(TxError::InsufficientBalance);
+        }
+    }
+    let bidding_state = BiddingState::get();
+    let fee_ratio = bidding_state.borrow().fee_ratio;
+
+    if balance_of(from) < value.clone() + fee.clone() {
+        return Err(TxError::InsufficientBalance);
+    }
+
+    _charge_fee(from, stats.fee_to, fee.clone(), fee_ratio);
+    _transfer(from, to, value.clone());
+
+    unsafe{
+        DESIGNATION_LIST.push(Designation{owner: to, role: "marketing".to_string(), assignment_time: ic_kit::ic::time() ,tokens: value.clone()});
+    }
+    let id = state.ledger_mut().transfer(from, to, value, fee);
+    state.notifications.insert(id.clone());
+
+    ic_cdk::print("Reaching here. \n");
+    Ok(id)
+
+}
 
 #[update(name = "transferFrom")]
 #[candid_method(update, rename = "transferFrom")]
