@@ -176,9 +176,9 @@ pub fn remainder_limit(des: Designation) -> Nat {
 		let time_elapsed = (ic_kit::ic::time() - des.assignment_time)/1000000000;
 		let days_elapsed = time_elapsed/(60*60*24);
 		match days_elapsed {
-			0..=89 => return des.tokens,
-			90..=179 => return Nat::from((3 as u128)*des.tokens/(4 as u128) as u128),
-			180..=270 => return Nat::from(des.tokens/(2 as u128) as u128),
+			0 ..=90 => return des.tokens,
+			90 ..=180 => return Nat::from((3 as u128)*des.tokens/(4 as u128) as u128),
+			180 ..=270 => return Nat::from(des.tokens/(2 as u128) as u128),
 			_ => return Nat::from(0 as u32),
 		
 		}
@@ -188,9 +188,9 @@ pub fn remainder_limit(des: Designation) -> Nat {
                 let time_elapsed = (ic_kit::ic::time() - des.assignment_time)/1000000000;
                 let days_elapsed = time_elapsed/(60*60*24);
                 match days_elapsed {
-                        0..=89 => return des.tokens,
-			90..=179 => return Nat::from((3 as u128)*des.tokens/(4 as u128) as u128),
-                        180..=270 => return Nat::from(des.tokens/(2 as u128) as u128),
+                        0 ..=90 => return des.tokens,
+			90 ..=180 => return Nat::from((3 as u128)*des.tokens/(4 as u128) as u128),
+                        180 ..=270 => return Nat::from(des.tokens/(2 as u128) as u128),
 
                         __ => return Nat::from(0 as u32),
 
@@ -201,9 +201,9 @@ pub fn remainder_limit(des: Designation) -> Nat {
                 let time_elapsed = (ic_kit::ic::time() - des.assignment_time)/1000000000;
                 let days_elapsed = time_elapsed/(60*60*24);
                 match days_elapsed {
-                        0..=89 => return des.tokens,
-                        90..=179 => return Nat::from((3 as u128)*des.tokens/(4 as u128) as u128),
-                        180..=270 => return Nat::from(des.tokens/(2 as u128) as u128),
+                        0 ..=90 => return des.tokens,
+                        90 ..=180 => return Nat::from((3 as u128)*des.tokens/(4 as u128) as u128),
+                        180 ..=270 => return Nat::from(des.tokens/(2 as u128) as u128),
 
                         _ => return Nat::from(0 as u32),
 
@@ -214,9 +214,9 @@ pub fn remainder_limit(des: Designation) -> Nat {
                 let time_elapsed = (ic_kit::ic::time() - des.assignment_time)/1000000000;
                 let days_elapsed = time_elapsed/(60*60*24);
                 match days_elapsed {
-                        0..=89 => return des.tokens,
-                        90..=179 => return Nat::from((3 as u128)*des.tokens/(4 as u128) as u128),
-                        180..=270 => return Nat::from(des.tokens/(2 as u128) as u128),
+                        0 ..=90 => return des.tokens,
+                        90 ..=180 => return Nat::from((3 as u128)*des.tokens/(4 as u128) as u128),
+                        180 ..=270 => return Nat::from(des.tokens/(2 as u128) as u128),
 
                         _ => return Nat::from(0 as u32),
 
@@ -227,9 +227,9 @@ pub fn remainder_limit(des: Designation) -> Nat {
                 let time_elapsed = (ic_kit::ic::time() - des.assignment_time)/1000000000;
                 let days_elapsed = time_elapsed/(60*60*24);
                 match days_elapsed {
-                        0..=89 => return des.tokens,
-                        90..=179 => return Nat::from((3 as u128)*des.tokens/(4 as u128) as u128),
-                        180..=270 => return Nat::from(des.tokens/(2 as u128) as u128),
+                        0 ..=90 => return des.tokens,
+                        90 ..=180 => return Nat::from((3 as u128)*des.tokens/(4 as u128) as u128),
+                        180 ..=270 => return Nat::from(des.tokens/(2 as u128) as u128),
 
                         _ => return Nat::from(0 as u32),
 
