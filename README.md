@@ -24,3 +24,5 @@ transferForMarketing
 The original format from the IS team has been left intact, and someone should be able to folk this repository, and run those commands to deploy token_factory, as mentioned on their Official GitHub, and by changing the values of vesting period in our code, anyone can implement vesting for IS20 as per their needs.
 For further instructions on how to run the code as it is with no changes, please refer to their repository:
 https://github.com/infinity-swap/IS20
+
+Note: While fully functional code, this repository is defunct and has been replaced by the IV20 repository as the reference code from the ICPverse Team.
